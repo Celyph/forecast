@@ -12,7 +12,7 @@
 
 ## Usage
 
-
+![Screenshot of the deployed website.](./assets/screenshot.png)
 
 
 ## Credits
