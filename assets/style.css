@@ -1,0 +1,9 @@
+.box{
+    position: absolute;
+    left: 30%;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #fff;
+    height: 30%;
+    width: 20%;
+}

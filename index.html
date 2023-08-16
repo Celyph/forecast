@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,400i,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/style.css" />
+  <title>Weather</title>
+</head>
+
+<body>
+    <form id="weather">
+        <label for="city">City:</label><br>
+        <input type="City" id="city" name="city"><br>
+        <label for="state">State:</label><br>
+        <input type="text" id="state" name="state"><br>
+        <label for="state">Country:</label><br>
+        <input type="text" id="country" name="country"><br><br>
+        <button type="button" id="submitbtn">Submit</button>
+      </form>
+
+
+<pre class="box" id="forecast">
+    
+</pre>
+
+<script>
+console.log('loading...');
+
+
+const API_KEY = '4151c20b5cfa1f51fccb8cd8e91d56da';
+
+const getLocation = async (cityName, state, country) => {
+    const URL = encodeURI(`http://api.openweathermap.org/geo/1.0/direct?q=${cityName},${state},${country}&limit=5&appid=${API_KEY}`);
+    console.log(URL);
+    const req = await fetch(URL);
+    const res = await req.json();
+    console.log(`result from getLocation: ${JSON.stringify(res)}`);
+    return [res[0].lat, res[0].lon];
+}
+
+const getWeather = async (cityName, state, country) => {
+    const latlon = await getLocation(cityName, state, country);
+    const lat = latlon[0], lon = latlon[1];
+    const URL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}`;
+
+    const req = await fetch(URL);
+    const res = await req.json();
+    console.log(`result from getWeather: ${JSON.stringify(res)}`);
+    return res.list;
+}
+
+const reportWeather = (weather) => {
+    const box = document.getElementById('forecast')
+    box.innerHTML = '';
+
+    weather.forEach((day) => {
+        const data = `Forecast:
+    Temperature: ${day.main.temp} deg K\n
+    Feels like: ${day.main.feels_like} deg K\n
+    Humidity: ${day.main.humidity}%\n
+    Wind Speed: ${day.wind.speed} m/s ${day.wind.deg} deg\n\n`;
+
+        box.innerHTML += data;
+    })
+}
+
+
+document.getElementById('submitbtn').onclick = async () => { 
+    console.log('submitting')
+    const cityName = document.getElementById('city').value;
+    const state = document.getElementById('state').value;
+    const country = document.getElementById('country').value;
+    const weather = await getWeather(cityName, state, country);
+    reportWeather(weather);
+}
+</script>
+
+</body>
