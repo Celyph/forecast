@@ -9,6 +9,7 @@
 
 ## Github
 - [Github Repository](https://github.com/Celyph/forecast)
+- [Deployed Site](https://celyph.github.io/forecast/)
 
 ## Usage
 
